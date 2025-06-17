@@ -2,67 +2,62 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Happy Birthday</title>
   <link rel="stylesheet" href="style.css" />
   <link
     rel="stylesheet"
     href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"
   />
-
 </head>
-
-
 <body>
-  <div id="balloon-container"></div>
-    <img src="assets/hbimage.png" alt="Happy Birthday" class="birthday-bg animate__animated animate__fadeIn " />
+
+    <script src="script.js"></script>
+  <div id="balloon-container">
+    
+  </div>
+  
+  <img src="assets/hbimage.png" alt="Happy Birthday" class="birthday-bg animate__animated animate__fadeIn" />
+
 
   <div class="cake">
+   <button id="wishButton" class="wish-button " onclick="startWish()">Make a Wish</button>
     <div class="plate animate__animated animate__bounceInDown animate-delay-1"></div>
     <div class="layer layer-bottom animate__animated animate__bounceInDown animate-delay-2"></div>
     <div class="layer layer-middle animate__animated animate__bounceInDown animate-delay-3"></div>
     <div class="layer layer-top animate__animated animate__bounceInDown animate-delay-4"></div>
     <div class="icing animate__animated animate__zoomInDown animate-delay-5"></div>
 
-
-
-
-
-     <!-- <div class="drip drip1 animate__animated animate__backInDown animate-delay-6"></div>
-    <div class="drip drip2 animate__animated animate__backInDown animate-delay-7"></div>
-    <div class="drip drip3 animate__animated animate__backInDown animate-delay-8"></div> -->
     <div class="candle animate__animated animate__bounceIn animate-delay-6">
-      <div class="flame "></div>
-      <!-- <div class="year">
-    <h1 class="neon">𝟚𝟜</h1> 
-    </div>   -->
+      <img class="smoke smoke1" src="assets/smoke.png" />
 
-
-
-
-    <div class="year">
-  <div class="number-container">
-    <div class="digit">
-      <div class="mini-flame "></div>
-      <span class="neon">𝟚</span>
-    </div>
-    <div class="digit">
-      <div class="mini-flame "></div>
-      <span class="neon">𝟜</span>
-    </div>
-  </div>
+      <div class="flame"></div>
+      
+      <div class="year">
+        <div class="number-container">
+          <div class="digit">
+  <div class="mini-flame"></div>
+  <img class="smoke smoke1" src="assets/smoke.png" />
+  <span class="neon">2</span>
+</div>
+<div class="digit">
+  <div class="mini-flame"></div>
+  <img class="smoke smoke2" src="assets/smoke.png" />
+  <span class="neon">4</span>
 </div>
 
-
-
-
-
-
+        </div>
+      </div>
+    </div>
   </div>
-<audio id="birthday-audio" src="assets/happy_birthday.mp3" preload="auto"></audio>
-    <script src="script.js"></script>
+
+  <div id="statusMessage" class="status">Click the button and blow to make your wish!</div>
+  <div id="volumeDisplay" class="hidden-initial">Volume: 0.000</div>
+ 
 
 
+  <audio id="birthday-audio" src="assets/happy_birthday.mp3" preload="auto"></audio>
   
+
 </body>
 </html>

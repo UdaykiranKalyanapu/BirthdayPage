@@ -187,14 +187,15 @@ background-color: #fd8fcf;
 }
 
 .candle::before {
-  content: "";
+   content: "l";
   position: absolute;
-  top: 0;
-  left: 0;
-  width: 16px;
-  height: 8px;
-  border-radius: 50%;
-  background-color: #901018;
+  top: -12px; /* move it above the candle */
+  left: 50%; /* center horizontally */
+  transform: translateX(-50%); /* perfectly center */
+  font-size: 18px; /* size of the wick */
+  color: #3a1e1e; /* dark brown or black for wick */
+  font-weight: bold;
+  z-index: 3;
 }
 
 .year {
@@ -250,7 +251,17 @@ background-color: #fd8fcf;
   
   position: absolute;
 } */
-
+.neon::before{
+   content: "l";
+  position: absolute;
+  top: -2px; /* move it above the candle */
+  left: 50%; /* center horizontally */
+  transform: translateX(-50%); /* perfectly center */
+  font-size: 18px; /* size of the wick */
+  color: #3a1e1e; /* dark brown or black for wick */
+  font-weight: bold;
+  z-index: 3;
+}
 .neon {
     
     font-size: 4rem;
@@ -441,7 +452,112 @@ background-color: #fd8fcf;
   transform: translateX(-50%);
   width: 800px;
   
-  z-index: 1;
+  
   
 
 }
+
+.wish-button{
+  position: absolute;
+  top: -180px;
+  left: 10px;
+   z-index: 7;
+   width: 350px;
+}
+
+.wish-button{
+  font-size: 50px;
+   font-family: "Fredoka One", cursive;
+  border: 2px solid transparent;
+  background-color: transparent;
+  color: #f12828;
+  overflow: hidden;
+  transition: color 0.25s;
+}
+
+.wish-button span {
+  position: relative;
+  z-index: 2;
+}
+
+.wish-button::before,
+.wish-button::after {
+  content: "";
+  width: 100%;
+  height: 50%;
+  position: absolute;
+  left: 0;
+  background-color: #dd6395; /* hover color */
+  transition: all 0.25s;
+  z-index: -1;
+}
+
+.wish-button::before {
+  top: 0;
+  transform: translate(-100%, 0);
+}
+
+.wish-button::after {
+  bottom: 0;
+  transform: translate(100%, 0);
+}
+
+.wish-button:hover {
+  color: #fff;
+  border-color: #dd6395;
+}
+
+.wish-button:hover::before,
+.wish-button:hover::after {
+  transform: translate(0, 0);
+}
+
+
+
+.smoke {
+  position: absolute;
+  width: 30px;
+  height: auto;
+  top: -30px;
+  left: 40%;
+  transform: translateX(-50%);
+  opacity: 0;
+ 
+  pointer-events: none;
+  z-index:990;
+   animation-duration: 3s;
+   animation-fill-mode: forwards;
+   animation-iteration-count: infinite;
+}
+
+.smoke1 {
+  animation: smoke1 3s linear forwards;
+  left: -5px;
+}
+
+.smoke2 {
+  left: -5px;
+  animation: smoke2 3s linear forwards;
+} 
+
+/* Optional: Hide mini flames initially with class */
+.hide-flame {
+  display: none;
+}
+
+
+@keyframes smoke1 {
+  0% { transform: translateY(0); opacity: 0; }
+  25% { transform: translateY(-10px); opacity: 0.5; }
+  50% { transform: translateY(-20px); opacity: 1; }
+  75% { transform: translateY(-30px); opacity: 0.5; }
+  100% { transform: translateY(-40px); opacity: 0; }
+}
+
+@keyframes smoke2 {
+  0% { transform: translateY(0); opacity: 0; }
+  25% { transform: translateY(-15px); opacity: 0.6; }
+  50% { transform: translateY(-30px); opacity: 1; }
+  75% { transform: translateY(-45px); opacity: 0.6; }
+  100% { transform: translateY(-60px); opacity: 0; }
+} 

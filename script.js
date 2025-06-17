@@ -1,86 +1,202 @@
-document.addEventListener("DOMContentLoaded", () => {
-  // Select all elements you want to apply sparkles to
-  const sparkleTargets = document.querySelectorAll('.flame, .mini-flame');
+let flames, volumeDisplay, statusMessage, music;
+let audioContext, analyser, mediaStreamSource;
+let isBlown = false;
+const BLOW_THRESHOLD = 0.09;
+const SMOOTHING = 0.8;
+let currentVolume = 0;
+let autoBlowTimeout;
 
-  // Function to create sparkles on a given element
-  const createSparkles = (element) => {
-    for (let i = 0; i < 10; i++) {
-      const sparkle = document.createElement('div');
-      sparkle.classList.add('sparkle');
+// Sparkle Effect
+function createSparkles(element) {
+  for (let i = 0; i < 10; i++) {
+    const sparkle = document.createElement('div');
+    sparkle.classList.add('sparkle');
 
-      const size = Math.random() * 4 + 2;
-      sparkle.style.width = `${size}px`;
-      sparkle.style.height = `${size}px`;
-      sparkle.style.position = 'absolute';
-      sparkle.style.left = '50%';
-      sparkle.style.top = '50%';
-      sparkle.style.transform = `translate(${Math.random() * 100 - 50}px, ${Math.random() * -100}px)`;
-      sparkle.style.background = 'rgba(255, 255, 0, 0.8)';
-      sparkle.style.borderRadius = '50%';
-      sparkle.style.pointerEvents = 'none';
-      sparkle.style.transition = 'opacity 0.5s ease-out';
-      
-      element.appendChild(sparkle);
+    const size = Math.random() * 4 + 2;
+    sparkle.style.width = `${size}px`;
+    sparkle.style.height = `${size}px`;
+    sparkle.style.position = 'absolute';
+    sparkle.style.left = '50%';
+    sparkle.style.top = '50%';
+    sparkle.style.transform = `translate(${Math.random() * 100 - 50}px, ${Math.random() * -100}px)`;
+    sparkle.style.background = 'rgba(255, 255, 0, 0.8)';
+    sparkle.style.borderRadius = '50%';
+    sparkle.style.pointerEvents = 'none';
+    sparkle.style.transition = 'opacity 0.5s ease-out';
 
-      setTimeout(() => {
-        sparkle.style.opacity = 0;
-      }, 50);
+    element.appendChild(sparkle);
 
-      setTimeout(() => {
-        sparkle.remove();
-      }, 1000);
+    setTimeout(() => {
+      sparkle.style.opacity = 0;
+    }, 50);
+
+    setTimeout(() => {
+      sparkle.remove();
+    }, 1000);
+  }
+}
+
+// Blow Detection
+function detectBlow() {
+  const dataArray = new Uint8Array(analyser.frequencyBinCount);
+  analyser.getByteFrequencyData(dataArray);
+
+  let sumSquares = 0;
+  for (let i = 0; i < dataArray.length; i++) {
+    sumSquares += dataArray[i] * dataArray[i];
+  }
+  const rms = Math.sqrt(sumSquares / dataArray.length) / 255;
+  currentVolume = currentVolume * SMOOTHING + rms * (1 - SMOOTHING);
+
+  if (volumeDisplay) {
+    volumeDisplay.textContent = `Volume: ${currentVolume.toFixed(3)}`;
+  }
+
+  if (currentVolume > BLOW_THRESHOLD && !isBlown) {
+    blowOutFlames();
+  }
+
+  if (!isBlown) {
+    requestAnimationFrame(detectBlow);
+  }
+}
+
+// Blow Action
+async function blowOutFlames() {
+  if (isBlown) return;
+  isBlown = true;
+
+  flames.forEach(f => f.style.display = 'none');
+
+  const smokes = document.querySelectorAll('.smoke');
+  smokes.forEach(smoke => {
+    smoke.style.opacity = '10';
+    // Reset animation in case it's retriggered
+    smoke.style.animation = 'none';
+    void smoke.offsetWidth;
+   smoke.style.animation = smoke.classList.contains('smoke1') ? 'smoke1 3s linear forwards' : 'smoke2 3s linear forwards';
+  });
+
+  if (statusMessage) {
+    statusMessage.textContent = '🎉 Candle blown out! Happy Birthday!';
+    statusMessage.style.color = '#66ff99';
+  }
+
+  if (volumeDisplay) {
+    volumeDisplay.style.display = 'none';
+  }
+
+  clearTimeout(autoBlowTimeout);
+
+  try {
+    await music.play();
+  } catch (err) {
+    console.error('Audio playback failed:', err);
+  }
+}
+
+// Microphone Setup
+async function initMicOnce() {
+  try {
+    if (statusMessage) {
+      statusMessage.textContent = 'Initializing microphone...';
+      statusMessage.style.color = '#ffc107';
     }
-  };
 
-  // Start generating sparkles after 6 seconds
-  setTimeout(() => {
-    setInterval(() => {
-      sparkleTargets.forEach(el => createSparkles(el));
-    }, 1000); // every 1 second
-  }, 6000); // delay of 6 seconds
-});
+    audioContext = new (window.AudioContext || window.webkitAudioContext)();
+    const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
 
+    mediaStreamSource = audioContext.createMediaStreamSource(stream);
+    analyser = audioContext.createAnalyser();
+    analyser.fftSize = 256;
+    mediaStreamSource.connect(analyser);
 
+    if (volumeDisplay) {
+      volumeDisplay.classList.remove('hidden-initial');
+    }
+
+    if (statusMessage) {
+      statusMessage.textContent = 'Listening... Blow the candle! 🎂';
+    }
+
+    detectBlow();
+
+    autoBlowTimeout = setTimeout(() => {
+      if (!isBlown) {
+        blowOutFlames();
+      }
+    }, 10000);
+
+  } catch (err) {
+    if (statusMessage) {
+      statusMessage.textContent = 'Mic access failed: ' + err.message;
+      statusMessage.style.color = 'red';
+    }
+    console.error('Microphone init failed:', err);
+  }
+}
+
+// Button Click Action
+function startWish() {
+  console.log('Button clicked, starting microphone...');
+  if (isBlown) return;
+  initMicOnce();
+}
+
+// Random Helpers
 function random(num) {
-  return Math.floor(Math.random() * num)
+  return Math.floor(Math.random() * num);
 }
 
 function getRandomStyles() {
-  var r = random(255);
-  var g = random(255);
-  var b = random(255);
-  var mt = random(200);
-  var ml = random(50);
-  var dur = random(5) + 5;
+  const r = random(255);
+  const g = random(255);
+  const b = random(255);
+  const mt = random(200);
+  const ml = random(50);
+  const dur = random(5) + 5;
+
   return `
     background-color: rgba(${r},${g},${b},0.7);
-    color: rgba(${r},${g},${b},0.7); 
+    color: rgba(${r},${g},${b},0.7);
     box-shadow: inset -7px -3px 10px rgba(${r - 10},${g - 10},${b - 10},0.7);
     margin: ${mt}px 0 0 ${ml}px;
     animation: float ${dur}s ease-in infinite;
-  `
+  `;
 }
 
 function createBalloons(num) {
-  var balloonContainer = document.getElementById("balloon-container")
-  for (var i = num; i > 0; i--) {
-    var balloon = document.createElement("div");
-    balloon.className = "balloon";
+  const balloonContainer = document.getElementById('balloon-container');
+  if (!balloonContainer) return;
+
+  for (let i = 0; i < num; i++) {
+    const balloon = document.createElement('div');
+    balloon.className = 'balloon';
     balloon.style.cssText = getRandomStyles();
-    balloonContainer.append(balloon);
+    balloonContainer.appendChild(balloon);
   }
 }
 
-window.onload = function () {
-  createBalloons(40);
-}
+// Page Ready
+document.addEventListener('DOMContentLoaded', () => {
+  flames = document.querySelectorAll('.flame, .mini-flame');
+  volumeDisplay = document.getElementById('volumeDisplay');
+  statusMessage = document.getElementById('statusMessage');
+  music = document.getElementById('birthday-audio');
 
+  // Sparkles after 6s, repeat every 1s
+  setTimeout(() => {
+    setInterval(() => {
+      flames.forEach(el => createSparkles(el));
+    }, 1000);
+  }, 6000);
 
-setTimeout(() => {
-  const music = document.getElementById('birthday-audio');
-  if (music) {
-    music.play().catch((err) => {
-      console.log("Music playback prevented by browser (e.g. autoplay restriction).", err);
-    });
+  createBalloons(50);
+
+  if (music) music.load();
+
+  const wishBtn = document.getElementById('wishButton');
+  if (wishBtn) {
+    wishBtn.addEventListener('click', startWish);
   }
-}, 8000);
+});
