@@ -1,6 +1,6 @@
   
   body {
-background-color: #fd8fcf;
+background-color: #f4b5da;
   margin: 0;
   height: 100vh;
   font-family: 'Ubuntu', sans-serif;
@@ -462,15 +462,16 @@ background-color: #fd8fcf;
   top: -180px;
   left: 10px;
    z-index: 7;
-   width: 350px;
+   width: 200px;
 }
 
 .wish-button{
+  color: #f12828;
   font-size: 50px;
    font-family: "Fredoka One", cursive;
   border: 2px solid transparent;
   background-color: transparent;
-  color: #f12828;
+  
   overflow: hidden;
   transition: color 0.25s;
 }
@@ -561,3 +562,59 @@ background-color: #fd8fcf;
   75% { transform: translateY(-45px); opacity: 0.6; }
   100% { transform: translateY(-60px); opacity: 0; }
 } 
+
+
+/* Google Fonts */
+@import url(https://fonts.googleapis.com/css?family=Anonymous+Pro);
+
+/* Cursor */
+.cursor{
+    position: relative;
+    width: 24em;
+    margin: 0 auto;
+    border-right: 2px solid rgba(255,255,255,.75);
+    font-size: 30px;
+    text-align: center;
+    white-space: nowrap;
+    overflow: hidden;
+    transform: translateY(-50%);  
+     font-size: 50px;
+   font-family: "Fredoka One", cursive;  
+}
+/* Animation */
+.typewriter-animation {
+  animation: 
+    typewriter 5s steps(50) 1s 1 normal both, 
+    blinkingCursor 500ms steps(50) infinite normal;
+}
+@keyframes typewriter {
+  from { width: 0; }
+  to { width: 100%; }
+}
+@keyframes blinkingCursor{
+  from { border-right-color: rgba(255,255,255,.75); }
+  to { border-right-color: transparent; }
+}
+
+
+
+.Mesage{
+  width: 135%;
+  
+  position: absolute;
+color: #f12828;
+  font-size: 50px;
+   font-family: "Fredoka One", cursive;
+  
+top: -300px;
+left: -50px;
+}
+
+
+
+
+
+
+  
+
+
