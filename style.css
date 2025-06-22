@@ -450,7 +450,8 @@ background-color: #f4b5da;
   top: 0%;
   left: 50%;
   transform: translateX(-50%);
-  width: 800px;
+    width: 613px;
+
   
   
   
@@ -569,17 +570,21 @@ background-color: #f4b5da;
 
 /* Cursor */
 .cursor{
-    position: relative;
-    width: 24em;
-    margin: 0 auto;
-    border-right: 2px solid rgba(255,255,255,.75);
-    font-size: 30px;
-    text-align: center;
-    white-space: nowrap;
-    overflow: hidden;
-    transform: translateY(-50%);  
-     font-size: 50px;
-   font-family: "Fredoka One", cursive;  
+      position: relative;
+      width: 24em;
+      margin: 0 auto;
+      border-right: 2px solid rgba(255, 255, 255, .75);
+
+      text-align: center;
+      white-space: nowrap;
+      overflow: visible;
+      transform: translateY(-50%);
+         font-size: 23px;
+      font-family: "Fredoka One", cursive;
+      top: 128%;
+      left: -55%
+
+  ;
 }
 /* Animation */
 .typewriter-animation {
